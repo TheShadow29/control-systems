@@ -1,0 +1,27 @@
+close all;
+
+s = tf('s');
+sysG = 1/((s^2 + 20*s + 101)*(s+20));
+k = 7899;
+sysD = (s-10.36)/(s+15);
+sysL = sysD * sysG;
+% sysL = (s+2)^2/((s^2)*(s+10)*(s^2 + 6*s+25));
+% sysL = (s^2 + s + 2)/(s*(s+5)*(s+6)*(s+1)^2);
+% sysL = (s+2)/(s*(s+1)*(s+5));
+sysL = (s^2 + 9)/(s*(s^2 + 144));
+[x,f] = tf2sym(-1/sysL);
+g = diff(f,x);
+g0 = solve(g,x);
+rlocus(sysL);
+[z,p,k] = zpkdata(sysL);
+z = cell2mat(z);
+m = size(z,1);
+p = cell2mat(p);
+n = size(p,1);
+alpha = (sum(p) - sum(z))/(n-m);
+asymptodes = 360/(n-m);
+% z = cell2mat(z);
+% figure;
+% step(sysL/(1+sysL));
+% step(k*sysL/(1+k*sysL));
+% step(sysG/(1+sysG));
